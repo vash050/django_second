@@ -1,3 +1,5 @@
+import time
+
 from django.conf import settings
 from django.contrib import auth
 from django.core.mail import send_mail
@@ -44,6 +46,9 @@ def register(request, flag=False):
             user = register_form.save()
             if send_verify_mail(user):
                 print('Сообщение для потверждения регистрации отправлено')
+
+                # return HttpResponseRedirect(reverse("auth:send_message", args=[user]))
+
                 return HttpResponseRedirect(reverse("auth:send_message"))
     else:
         register_form = ShopUserRegisterForm()
@@ -54,7 +59,8 @@ def register(request, flag=False):
 
 def send_message(request):
     return render(request, "authnapp/send_message.html")
-
+  
+  
 def edit(request):
     title = "редактирование"
 

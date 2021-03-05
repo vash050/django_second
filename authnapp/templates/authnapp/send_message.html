@@ -1,0 +1,14 @@
+{% extends 'authnapp/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <h3>Сообщение для потверждения регистрации отправлено</h3>
+<br>
+<button class="btn btn-round form-control">
+    <a href="{% url 'auth:login' %}" class="">
+        Ok
+    </a>
+</button>
+
+{% endblock %}

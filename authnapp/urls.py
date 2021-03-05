@@ -16,4 +16,5 @@ urlpatterns = [
     # path("edit/", authnapp.edit, name="edit"),
     re_path(r'^verify/(?P<email>.+)/(?P<activation_key>\w+)/$', authnapp.verify, name='verify'),
     re_path(r"^send_message/$", authnapp.send_message, name="send_message"),
+    # re_path(r"^send_verify_mail/(?P<user>\w+)/$", authnapp.send_verify_mail, name="send_verify_mail"),
 ]

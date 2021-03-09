@@ -174,6 +174,7 @@ EMAIL_FILE_PATH = "tmp/email-messages/"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "social_core.backends.vk.VKOAuth2",
+    'social_core.backends.github.GithubOAuth2',
 )
 
 # SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.vk.VKOAuth2",)
@@ -198,6 +199,14 @@ SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 # Full list of scope here:
 #     https://vk.com/dev/permissions
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
+
+with open("tmp/secrets/github.json", "r") as f:
+    GT = json.load(f)
+
+SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
+SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
+
+SOCIAL_AUTH_GITHUB_SCOPE = ["email"]
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",

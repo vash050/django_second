@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
-from django.urls import re_path
+from django.urls import re_path, path
 
 import mainapp.views as mainapp
 
@@ -12,6 +12,7 @@ urlpatterns = [
     # path("products/", include("mainapp.urls", namespace="products")),
     re_path(r"^contact/", mainapp.contact, name="contact"),
     # path("contact/", mainapp.contact, name="contact"),
+    path("", include("social_django.urls", namespace="social")),
     re_path(r"^auth/", include("authnapp.urls", namespace="auth")),
     # path("auth/", include("authnapp.urls", namespace="auth")),
     re_path(r"^basket/", include("basketapp.urls", namespace="basket")),

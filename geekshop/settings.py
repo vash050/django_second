@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "z90_3(-fxx+xo$p&k0o#kp!1o45!$f!b)0_*-b$3emzzmb-ci3"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.getenv("DJANGO_PRODUCTION", default=None) else True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -88,12 +88,23 @@ WSGI_APPLICATION = "geekshop.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "NAME": "geekshop",
+            "ENGINE": "django.db.backends.postgresql",
+            "USER": "mystudy",
+            "PASSWORD": "Ilikestudy",
+            "HOST": "localhost",
+        }
+    }
 
 
 # Password validation
@@ -136,7 +147,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+if DEBUG:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files
 MEDIA_URL = "/media/"
@@ -189,11 +203,17 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 # Load settings from file
 
 
-with open("tmp/secrets/vk.json", "r") as f:
-    VK = json.load(f)
+try:
+    with open("tmp/secrets/vk.json", "r") as f:
+        VK = json.load(f)
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
-SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+    SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
+    SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+except Exception as exp:
+    print("Settings loading fail: %s" % (exp))
+
+# SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
 
 LOGIN_ERROR_URL = "/"
 
@@ -202,11 +222,17 @@ SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 #     https://vk.com/dev/permissions
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
 
-with open("tmp/secrets/github.json", "r") as f:
-    GT = json.load(f)
+try:
+    with open("tmp/secrets/vk.json", "r") as f:
+        GT = json.load(f)
 
-SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
-SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
+    SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
+    SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
+except Exception as exp:
+    print("Settings loading fail: %s" % (exp))
+
+# SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
+# SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
 
 SOCIAL_AUTH_GITHUB_SCOPE = ["email"]
 

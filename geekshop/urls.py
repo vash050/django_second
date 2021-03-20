@@ -17,6 +17,7 @@ urlpatterns = [
     # path("auth/", include("authnapp.urls", namespace="auth")),
     re_path(r"^basket/", include("basketapp.urls", namespace="basket")),
     # path("basket/", include("basketapp.urls", namespace="basket")),
+    re_path(r"^order/", include("ordersapp.urls", namespace="order")),
     re_path(r"^admin/", include("adminapp.urls", namespace="admin")),
     # path("admin/", include("adminapp.urls", namespace="admin")),
 ]

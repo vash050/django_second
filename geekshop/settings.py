@@ -100,8 +100,8 @@ else:
         "default": {
             "NAME": "geekshop",
             "ENGINE": "django.db.backends.postgresql",
-            "USER": "mystudy",
-            "PASSWORD": "Ilikestudy",
+            "USER": "django",
+            "PASSWORD": "IlikeFedora33",
             "HOST": "localhost",
         }
     }

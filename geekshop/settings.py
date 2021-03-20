@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "basketapp",
     "adminapp",
     "social_django",
+
     "ordersapp",
 ]
 
@@ -76,6 +77,7 @@ TEMPLATES = [
                 "mainapp.context_processors.basket",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
+
                 "django.template.context_processors.media",
             ],
         },
@@ -203,6 +205,7 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 # Load settings from file
 
 
+
 try:
     with open("tmp/secrets/vk.json", "r") as f:
         VK = json.load(f)
@@ -215,12 +218,14 @@ except Exception as exp:
 # SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
 # SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
 
+
 LOGIN_ERROR_URL = "/"
 
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 # Full list of scope here:
 #     https://vk.com/dev/permissions
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
+
 
 try:
     with open("tmp/secrets/vk.json", "r") as f:
@@ -233,6 +238,7 @@ except Exception as exp:
 
 # SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
 # SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
+
 
 SOCIAL_AUTH_GITHUB_SCOPE = ["email"]
 

@@ -1,0 +1,29 @@
+{% extends 'authnapp/base.html' %}
+{% load staticfiles %}
+
+ {% block js %}
+    <script src="{% static 'js/mytimer.js' %}"></script>
+
+ {% endblock %}
+
+
+
+{% block content %}
+    <h3>Сообщение для потверждения регистрации отправлено</h3>
+<br>
+<button class="btn btn-round form-control">
+    <a href="{% url 'auth:login' %}" class="">
+        Ok
+    </a>
+</button>
+
+
+{#<button class="btn btn-round form-control">#}
+{#    {{ user.pk }}#}
+{#    <a href="{% url 'auth:send_verify_mail' user.pk %}" class="">#}
+{#        отправить повторно#}
+{#    </a>#}
+{#</button>#}
+
+
+{% endblock %}

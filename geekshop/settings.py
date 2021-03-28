@@ -14,8 +14,9 @@ import os
 import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -27,7 +28,6 @@ SECRET_KEY = "z90_3(-fxx+xo$p&k0o#kp!1o45!$f!b)0_*-b$3emzzmb-ci3"
 DEBUG = False if os.getenv("DJANGO_PRODUCTION", default=None) else True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -47,6 +47,13 @@ INSTALLED_APPS = [
     "ordersapp",
 ]
 
+if DEBUG:
+    INSTALLED_APPS.extend([
+        "debug_toolbar",
+        "template_profiler_panel",
+        "django_extensions",
+    ])
+
 # Auth model
 AUTH_USER_MODEL = "authnapp.ShopUser"
 
@@ -54,12 +61,17 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE.extend([
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ])
 
 ROOT_URLCONF = "geekshop.urls"
 
@@ -86,7 +98,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "geekshop.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -108,7 +119,6 @@ else:
         }
     }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 if not DEBUG:
@@ -129,7 +139,6 @@ if not DEBUG:
 else:
     AUTH_PASSWORD_VALIDATORS = []  # Set simple password for debug
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -142,7 +151,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -205,7 +213,6 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 # Load settings from file
 
 
-
 try:
     with open("tmp/secrets/vk.json", "r") as f:
         VK = json.load(f)
@@ -226,10 +233,9 @@ SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 #     https://vk.com/dev/permissions
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
 
-
 try:
-    with open("tmp/secrets/vk.json", "r") as f:
-        GT = json.load(f)
+    with open("tmp/secrets/github.json", "r") as fil:
+        GT = json.load(fil)
 
     SOCIAL_AUTH_GITHUB_KEY = GT["SOCIAL_AUTH_GITHUB_KEY"]
     SOCIAL_AUTH_GITHUB_SECRET = GT["SOCIAL_AUTH_GITHUB_SECRET"]
@@ -253,3 +259,33 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
 )
+
+# INTERNAL_IPS = ["127.0.0.1"]
+
+# Debgu tool bar settings
+if DEBUG:
+    def show_toolbar(request):
+        return True
+
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+    }
+
+    DEBUG_TOOLBAR_PANELS = [
+        # "ddt_request_history.panels.request_history.RequestHistoryPanel",
+        "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.logging.LoggingPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+        "template_profiler_panel.panels.template.TemplateProfilerPanel",
+    ]

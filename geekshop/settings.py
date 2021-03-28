@@ -91,6 +91,7 @@ TEMPLATES = [
                 "social_django.context_processors.login_redirect",
 
                 "django.template.context_processors.media",
+                # "debug_toolbar.middleware.DebugToolbarMiddleware",
             ],
         },
     },
@@ -289,3 +290,4 @@ if DEBUG:
         "debug_toolbar.panels.profiling.ProfilingPanel",
         "template_profiler_panel.panels.template.TemplateProfilerPanel",
     ]
+

@@ -5,7 +5,9 @@ from django.core.cache import cache
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
+
 from django.views.decorators.cache import cache_page
+
 
 from .models import Contact, Product, ProductCategory
 
@@ -102,8 +104,15 @@ def main(request):
 #     return same_products
 
 
+# def get_same_products(hot_product):
+#     same_products = Product.objects.filter(category=hot_product.category, is_active=True).exclude(pk=hot_product.pk)[:3]
+#     return same_products
+
+
+
+
 def get_hot_product_list():
-    products = get_products()
+    products = Product.objects.filter(is_active=True, category__is_active=True).select_related("category")
     hot_product = random.sample(list(products), 1)[0]
     hot_list = products.exclude(pk=hot_product.pk)[:3]
     return (hot_product, hot_list)

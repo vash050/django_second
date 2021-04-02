@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,16 +43,15 @@ INSTALLED_APPS = [
     "basketapp",
     "adminapp",
     "social_django",
-
     "ordersapp",
 ]
 
-if DEBUG:
     INSTALLED_APPS.extend([
         "debug_toolbar",
         "template_profiler_panel",
         "django_extensions",
     ])
+
 
 # Auth model
 AUTH_USER_MODEL = "authnapp.ShopUser"
@@ -73,6 +72,7 @@ if DEBUG:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ])
 
+
 ROOT_URLCONF = "geekshop.urls"
 
 TEMPLATES = [
@@ -89,7 +89,6 @@ TEMPLATES = [
                 "mainapp.context_processors.basket",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
-
                 "django.template.context_processors.media",
             ],
         },
@@ -114,13 +113,14 @@ else:
             "NAME": "geekshop",
             "ENGINE": "django.db.backends.postgresql",
             "USER": "django",
-            "PASSWORD": "IlikeFedora33",
+            "PASSWORD": "geekbrains",
             "HOST": "localhost",
         }
     }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+
 if not DEBUG:
     AUTH_PASSWORD_VALIDATORS = [
         {
@@ -137,7 +137,11 @@ if not DEBUG:
         },
     ]
 else:
+
+    # Set simple password for debug
+
     AUTH_PASSWORD_VALIDATORS = []  # Set simple password for debug
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -157,6 +161,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+# In common case STATIC_ROOT can not be in STATICFILES_DIRS
 if DEBUG:
     STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 else:
@@ -195,12 +200,9 @@ EMAIL_HOST_PASSWORD = None
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "tmp/email-messages/"
 
-# --- To the end of file ---
-
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "social_core.backends.vk.VKOAuth2",
-    'social_core.backends.github.GithubOAuth2',
 )
 
 # SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.vk.VKOAuth2",)
@@ -212,6 +214,8 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 
 # Load settings from file
 
+import json
+
 
 try:
     with open("tmp/secrets/vk.json", "r") as f:
@@ -222,16 +226,13 @@ try:
 except Exception as exp:
     print("Settings loading fail: %s" % (exp))
 
-# SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
-# SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
-
-
 LOGIN_ERROR_URL = "/"
 
 SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
 # Full list of scope here:
 #     https://vk.com/dev/permissions
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
+
 
 try:
     with open("tmp/secrets/github.json", "r") as fil:
@@ -263,6 +264,49 @@ SOCIAL_AUTH_PIPELINE = (
 # INTERNAL_IPS = ["127.0.0.1"]
 
 # Debgu tool bar settings
+
+# if DEBUG:
+
+#     def show_toolbar(request):
+#         return True
+
+#     DEBUG_TOOLBAR_CONFIG = {
+#         "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+#     }
+
+#     DEBUG_TOOLBAR_PANELS = [
+#         # "ddt_request_history.panels.request_history.RequestHistoryPanel",
+#         "debug_toolbar.panels.versions.VersionsPanel",
+#         "debug_toolbar.panels.timer.TimerPanel",
+#         "debug_toolbar.panels.settings.SettingsPanel",
+#         "debug_toolbar.panels.headers.HeadersPanel",
+#         "debug_toolbar.panels.request.RequestPanel",
+#         "debug_toolbar.panels.sql.SQLPanel",
+#         "debug_toolbar.panels.templates.TemplatesPanel",
+#         "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+#         "debug_toolbar.panels.cache.CachePanel",
+#         "debug_toolbar.panels.signals.SignalsPanel",
+#         "debug_toolbar.panels.logging.LoggingPanel",
+#         "debug_toolbar.panels.redirects.RedirectsPanel",
+#         "debug_toolbar.panels.profiling.ProfilingPanel",
+#         "template_profiler_panel.panels.template.TemplateProfilerPanel",
+#     ]
+
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_SECONDS = 120
+CACHE_MIDDLEWARE_KEY_PREFIX = "geekbrains"
+
+# Be carefull if you have Windows! Install Memcached before run project!
+#     https://www.ubergizmo.com/how-to/install-memcached-windows/
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
+}
+
+LOW_CACHE = True
+
 if DEBUG:
     def show_toolbar(request):
         return True
